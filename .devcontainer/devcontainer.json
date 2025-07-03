@@ -1,8 +1,8 @@
 {
-	"name": "tensorflow_dgpu",
+	"name": "yolov11_dgpu",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "workspace",
-	"workspaceFolder": "/workspace/detection",
+	"workspaceFolder": "/workspace/yolov11-multi-object",
 	"settings": {
 		"terminal.integrated.shell.linux": null
 	},
