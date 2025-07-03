@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  workspace:
+    image: docker.io/ultralytics/ultralytics:latest-runner
+    # build:
+    #   context: ..
+    #   dockerfile: Dockerfile
+    entrypoint: /bin/bash
+    runtime: nvidia
+    privileged: true
+    network_mode: host
+    cap_add:
+      - SYS_ADMIN
+    volumes:
+      - /home/bepro/yolov11-multi-object:/workspace/yolov11-multi-object:cached
+      - /home/bepro/data:/workspace/yolov11-multi-object/data
+      # - ~/.ssh:/root/.ssh:ro
+    shm_size: 16g
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    pid: host
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=utility,video,compute
+      - WANDB_API_KEY=f772ecfd424a92b18bd968ccaff6df6d8a39c273
+    user: root
+    tty: true
+    stdin_open: true 

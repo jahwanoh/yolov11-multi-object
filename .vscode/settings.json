@@ -1,0 +1,6 @@
+{
+    "docker.environment": {
+        // "DOCKER_HOST": "ssh://bepro@192.168.178.153"
+        "DOCKER_HOST": "ssh://bepro@cvpn_uk.bepro11.com:24153"
+    }
+}

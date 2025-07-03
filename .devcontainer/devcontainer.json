@@ -1,0 +1,18 @@
+{
+	"name": "tensorflow_dgpu",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "workspace",
+	"workspaceFolder": "/workspace/detection",
+	"settings": {
+		"terminal.integrated.shell.linux": null
+	},
+	"extensions": [
+		"ms-vscode.cpptools",
+		"ms-vscode.cmake-tools",
+		"xaver.clang-format"
+	],
+	"forwardPorts": [
+		8080
+	],
+	"remoteUser": "root"
+}
