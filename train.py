@@ -26,8 +26,8 @@ def train_yolov11(
         imgsz=img_size,
         epochs=epochs,
         project=project,
-        name=run_name,
-        wandb=wandb_enabled
+        batch=-1
+        name=run_name
     )
 
 if __name__ == "__main__":

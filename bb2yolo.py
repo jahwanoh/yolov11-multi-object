@@ -43,6 +43,14 @@ def main(base_dir):
         os.makedirs(label_dir, exist_ok=True)
         convert_csv_to_yolo(csv_path, img_dir, label_dir)
 
+        # Create a symlink from raw_images to images if it doesn't exist
+        images_symlink = os.path.join(dataset_dir, "images")
+        if not os.path.exists(images_symlink):
+            try:
+                os.symlink(img_dir, images_symlink)
+            except FileExistsError:
+                pass
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dir", type=str, required=True, help="Base directory of dataset")

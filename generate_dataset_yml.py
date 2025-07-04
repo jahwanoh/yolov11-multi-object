@@ -5,20 +5,20 @@ import argparse
 
 def generate_yaml(src_root):
     label_dirs = sorted(glob(os.path.join(src_root, "*-*/labels")))
-    image_dirs = [ld.replace("/labels", "/raw_images") for ld in label_dirs]
+    dataset_dirs = [os.path.dirname(ld) for ld in label_dirs]
 
     yaml_content = {
         "train": [],
         "val": [],
-        "nc": 1,
+        "nc": 2,
         "names": ["object"]
     }
 
-    for i, (img_dir, _) in enumerate(zip(image_dirs, label_dirs)):
+    for i, dataset_dir in enumerate(dataset_dirs):
         split = "train" if i % 5 != 0 else "val"  # ~80/20 split
-        yaml_content[split].append(img_dir)
+        yaml_content[split].append(dataset_dir)
 
-    yaml_path = os.path.join(src_root, "bepro_yolo_dataset.yaml")
+    yaml_path = os.path.join(src_root, "yolo_dataset.yaml")
     with open(yaml_path, "w") as f:
         yaml.dump(yaml_content, f, default_flow_style=False)
 
