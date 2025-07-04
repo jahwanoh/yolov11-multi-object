@@ -26,7 +26,7 @@ def train_yolov11(
         imgsz=img_size,
         epochs=epochs,
         project=project,
-        batch=-1
+        batch=-1,
         name=run_name
     )
 
