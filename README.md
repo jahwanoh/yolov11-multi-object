@@ -1,4 +1,4 @@
-# YOLOv11 Multi-Object Detection Pipeline
+# YOLOv11 Multi-Object Detection Pipeline (🚧 in progress)
 
 Welcome to the **YOLOv11 Multi-Object** repository! This project provides a hands-on, end-to-end pipeline for object detection and tracking using the latest YOLOv11 framework, with a focus on practical machine learning lifecycle management. The repository is designed for experimentation, annotation, training, and visualization, leveraging modern tools such as Docker, Weights & Biases, and PyTorch.
 
