@@ -2,12 +2,13 @@ import argparse
 import os
 from ultralytics import YOLO
 
+
 def train_yolov11(
     data_yaml,
     model="yolov11n.pt",
     img_size=1280,
     epochs=100,
-    project="bepro",
+    project="sports",
     run_name="exp1",
     wandb_enabled=True
 ):
@@ -16,19 +17,42 @@ def train_yolov11(
         try:
             import wandb
             wandb.login()
+            wandb.init(project=project, job_type="training")
         except Exception as e:
             print("W&B login failed:", e)
 
     # Load YOLOv11 model and train
     model = YOLO(model)
+    
+    if wandb_enabled:
+        import wandb
+        from wandb.integrateion.ultralytics import add_wandb_callback
+        
+        add_wandb_callback(model, enable_model_checkpointing=True)
+        
     model.train(
         data=data_yaml,
         imgsz=img_size,
         epochs=epochs,
         project=project,
-        batch=-1,
-        name=run_name
+        batch=1,
+        name=run_name,
+        plots=False
     )
+    
+    model.val()
+    
+    result = model("./data/test/56805.jpg",)
+    if result is not None:
+        boxes = result.boxes  # Boxes object for bounding box outputs
+        masks = result.masks  # Masks object for segmentation masks outputs
+        keypoints = result.keypoints  # Keypoints object for pose outputs
+        probs = result.probs  # Probs object for classification outputs
+        obb = result.obb  # Oriented boxes object for OBB outputs
+        result.save(filename="result.jpg")  # save to disk
+    
+    if wandb_enabled:
+        wandb.finish()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -36,7 +60,7 @@ if __name__ == "__main__":
     parser.add_argument("--model", type=str, default="yolov11n.pt", help="YOLOv11 model to use")
     parser.add_argument("--imgsz", type=int, default=1280, help="Input image size")
     parser.add_argument("--epochs", type=int, default=100, help="Number of training epochs")
-    parser.add_argument("--project", type=str, default="bepro", help="W&B project name")
+    parser.add_argument("--project", type=str, default="sports", help="W&B project name")
     parser.add_argument("--name", type=str, default="exp1", help="W&B run name")
     parser.add_argument("--wandb", action="store_true", help="Enable W&B logging")
 
