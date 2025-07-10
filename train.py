@@ -10,7 +10,10 @@ def train_yolov11(
     epochs=100,
     project="sports",
     run_name="exp1",
-    wandb_enabled=True
+    wandb_enabled=True,
+    batch=-1,
+    lr=0.001,
+    optimizer="Adam"
 ):
     # Ensure W&B is logged in if enabled
     if wandb_enabled:
@@ -28,7 +31,9 @@ def train_yolov11(
         imgsz=img_size,
         epochs=epochs,
         project=project,
-        batch=1,
+        batch=batch,
+        lr0=lr,
+        optimizer=optimizer,
         name=run_name,
         plots=False
     )
@@ -56,6 +61,9 @@ if __name__ == "__main__":
     parser.add_argument("--project", type=str, default="sports", help="W&B project name")
     parser.add_argument("--name", type=str, default="exp1", help="W&B run name")
     parser.add_argument("--wandb", action="store_true", help="Enable W&B logging")
+    parser.add_argument("--batch", type=int, default=-1, help="Batch size for training")
+    parser.add_argument("--lr", type=float, default=0.001, help="Learning rate")
+    parser.add_argument("--optimizer", type=str, default="Adam", help="Optimizer (e.g., Adam, SGD)")
 
     args = parser.parse_args()
 
@@ -66,5 +74,8 @@ if __name__ == "__main__":
         epochs=args.epochs,
         project=args.project,
         run_name=args.name,
-        wandb_enabled=args.wandb
+        wandb_enabled=args.wandb,
+        batch=args.batch,
+        lr=args.lr,
+        optimizer=args.optimizer
     )
