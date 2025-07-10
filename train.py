@@ -17,18 +17,11 @@ def train_yolov11(
         try:
             import wandb
             wandb.login()
-            wandb.init(project=project, job_type="training")
         except Exception as e:
             print("W&B login failed:", e)
 
     # Load YOLOv11 model and train
     model = YOLO(model)
-    
-    if wandb_enabled:
-        import wandb
-        from wandb.integrateion.ultralytics import add_wandb_callback
-        
-        add_wandb_callback(model, enable_model_checkpointing=True)
         
     model.train(
         data=data_yaml,
@@ -51,8 +44,8 @@ def train_yolov11(
         obb = result.obb  # Oriented boxes object for OBB outputs
         result.save(filename="result.jpg")  # save to disk
     
-    if wandb_enabled:
-        wandb.finish()
+    # if wandb_enabled:
+        # wandb.finish()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

@@ -51,6 +51,39 @@ def main(base_dir):
             except FileExistsError:
                 pass
 
+    # Draw bounding boxes on one sample image for each dataset directory using YOLO annotation and save to file
+    for sample_dataset in dataset_dirs:
+        sample_img_dir = os.path.join(sample_dataset, "raw_images")
+        sample_label_dir = os.path.join(sample_dataset, "labels")
+        sample_images = sorted(glob(os.path.join(sample_img_dir, "*.jpg")))
+        if sample_images:
+            sample_img_path = sample_images[0]
+            sample_img = cv2.imread(sample_img_path)
+            if sample_img is not None:
+                img_height, img_width = sample_img.shape[:2]
+                # Find corresponding label file
+                sample_img_name = os.path.splitext(os.path.basename(sample_img_path))[0]
+                label_path = os.path.join(sample_label_dir, f"{sample_img_name}.txt")
+                if os.path.exists(label_path):
+                    with open(label_path, "r") as f:
+                        for line in f:
+                            parts = line.strip().split()
+                            if len(parts) == 5:
+                                class_id, x_center, y_center, w, h = map(float, parts)
+                                # Convert YOLO format to pixel coordinates
+                                x_center *= img_width
+                                y_center *= img_height
+                                w *= img_width
+                                h *= img_height
+                                x1 = int(x_center - w / 2)
+                                y1 = int(y_center - h / 2)
+                                x2 = int(x_center + w / 2)
+                                y2 = int(y_center + h / 2)
+                                cv2.rectangle(sample_img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                    # Save the image with bounding boxes
+                    out_path = os.path.join(sample_dataset, "sample_with_boxes.jpg")
+                    cv2.imwrite(out_path, sample_img)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dir", type=str, required=True, help="Base directory of dataset")
